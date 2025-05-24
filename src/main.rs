@@ -1,19 +1,22 @@
-use std::env;
-use std::path::Path;
+use std::error::Error;
+use std::process;
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
+use documentador::cli::args::read_validate_args;
 
-    if args.len() < 2 {
-        eprintln!("Uso: Herrramienta de documentar <ruta_al_archivo_js>");
-        std::process::exit(1);
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
+    if let Err(e) = run().await {
+        eprintln!("Error: {}", e);
+        if let Some(source) = e.source() {
+            eprintln!("Caused by: {}", source);
+        }
+        process::exit(1);
     }
-    let ruta = &args[1];
+    Ok(())
+}
 
-    if !Path::new(ruta).exists() {
-        eprintln!("El archivo no existe: {}", ruta);
-        std::process::exit(1);
-    }
+async fn run() -> Result<(), Box<dyn Error + Send + Sync>> {
+    let path = read_validate_args();
 
-    println!("Ruta al archivo: {}", ruta);
+    Ok(())
 }
