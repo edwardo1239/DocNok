@@ -1,7 +1,7 @@
 use std::error::Error;
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum InputPathErrorKind {
     InvalidInput,
     MissingArgument
@@ -53,11 +53,12 @@ impl Error for InputPathError {
 
 
 //#region FileError
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum FileErrorKind {
     NotFound,
     PermissionDenied,
     InvalidFormat,
+    EmptyFile,
     Other
 }
 
